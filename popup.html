@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Słownik Highlighter</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #1a1a1a;
+        --muted: #6b7280;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --border: #e5e7eb;
+        --highlight: #fff59d;
+        --danger: #dc2626;
+        --success: #16a34a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        width: 320px;
+        margin: 0;
+        padding: 14px;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+          sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+      }
+      h1 {
+        font-size: 15px;
+        margin: 0 0 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      h1 .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: inline-block;
+      }
+      textarea {
+        width: 100%;
+        height: 110px;
+        resize: vertical;
+        padding: 8px;
+        font-size: 13px;
+        font-family: inherit;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        outline: none;
+      }
+      textarea:focus {
+        border-color: var(--accent);
+      }
+      .hint {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 4px 0 10px 0;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      button {
+        flex: 1;
+        padding: 9px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      #saveBtn {
+        background: #f3f4f6;
+        color: var(--fg);
+      }
+      #saveBtn:hover {
+        background: #e5e7eb;
+      }
+      #highlightBtn {
+        background: var(--accent);
+        color: white;
+      }
+      #highlightBtn:hover {
+        background: var(--accent-hover);
+      }
+      #clearBtn {
+        background: #fee2e2;
+        color: var(--danger);
+      }
+      #clearBtn:hover {
+        background: #fecaca;
+      }
+      #status {
+        font-size: 12px;
+        margin-top: 8px;
+        min-height: 16px;
+        color: var(--muted);
+      }
+      #status.success {
+        color: var(--success);
+      }
+      #status.error {
+        color: var(--danger);
+      }
+      .options {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .swatch {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        background: var(--highlight);
+        border: 1px solid var(--border);
+        vertical-align: middle;
+      }
+      input[type="color"] {
+        width: 26px;
+        height: 22px;
+        border: none;
+        padding: 0;
+        background: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><span class="dot"></span>Słownik Highlighter</h1>
+
+    <textarea
+      id="dictionary"
+      placeholder="Wpisz słowa/frazy, każde w nowej linii, np.:&#10;Butylphenyl Methylpropional&#10;E171&#10;dwutlenek tytanu"></textarea>
+    <div class="hint">
+      Jedno słowo lub fraza na linię. Wielkość liter nie ma znaczenia.
+    </div>
+
+    <div class="options">
+      <label for="color">Kolor podświetlenia:</label>
+      <input type="color" id="color" value="#fff59d" />
+      <label
+        style="margin-left: auto; display: flex; align-items: center; gap: 4px">
+        <input type="checkbox" id="wholeWord" style="margin: 0" /> całe słowa
+      </label>
+    </div>
+
+    <div class="row">
+      <button id="saveBtn">💾 Zapisz słownik</button>
+    </div>
+    <div class="row">
+      <button id="highlightBtn">🔍 Podświetl na stronie</button>
+    </div>
+    <div class="row">
+      <button id="clearBtn">✖ Wyczyść podświetlenia</button>
+    </div>
+
+    <div id="status"></div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
