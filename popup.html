@@ -109,6 +109,38 @@
       #status.error {
         color: var(--danger);
       }
+      #matches {
+        display: none;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+      }
+      #matches.visible {
+        display: block;
+      }
+      #matches h2 {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 0 6px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      #matches ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      #matches li {
+        background: #f3f4f6;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 11px;
+        color: var(--fg);
+      }
       .options {
         display: flex;
         align-items: center;
@@ -166,6 +198,7 @@
     </div>
 
     <div id="status"></div>
+    <div id="matches" aria-live="polite"></div>
 
     <script src="popup.js"></script>
   </body>

@@ -26,13 +26,27 @@
     });
   }
 
+  function normalizeWord(value) {
+    return String(value || "")
+      .trim()
+      .toLowerCase();
+  }
+
   function highlightWords(words, color, wholeWord) {
     clearHighlights();
 
-    if (!words || words.length === 0) return 0;
+    if (!words || words.length === 0) {
+      return { count: 0, matches: [] };
+    }
+
+    const uniqueWords = [
+      ...new Map(
+        words.map((word) => [normalizeWord(word), String(word).trim()]),
+      ).values(),
+    ];
 
     // Longer phrases first, so substrings inside longer phrases don't get split first
-    const sorted = [...words].sort((a, b) => b.length - a.length);
+    const sorted = [...uniqueWords].sort((a, b) => b.length - a.length);
     const escaped = sorted.map(escapeRegExp);
     const boundary = wholeWord ? "\\b" : "";
     const pattern = new RegExp(
@@ -41,6 +55,7 @@
     );
 
     let count = 0;
+    const matchedSet = new Set();
 
     const walker = document.createTreeWalker(
       document.body,
@@ -89,6 +104,15 @@
           );
         }
 
+        const matchedWord = match[0].trim();
+        const normalized = normalizeWord(matchedWord);
+        const originalWord = uniqueWords.find(
+          (word) => normalizeWord(word) === normalized,
+        );
+        if (originalWord) {
+          matchedSet.add(originalWord);
+        }
+
         const mark = document.createElement("mark");
         mark.className = MARK_CLASS;
         mark.style.backgroundColor = color || "#fff59d";
@@ -121,20 +145,20 @@
       }
     }
 
-    return count;
+    return { count, matches: [...matchedSet] };
   }
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "highlight") {
-      const count = highlightWords(
+      const result = highlightWords(
         message.words,
         message.color,
         message.wholeWord,
       );
-      sendResponse({ count });
+      sendResponse(result);
     } else if (message.action === "clear") {
       clearHighlights();
-      sendResponse({ ok: true });
+      sendResponse({ ok: true, count: 0, matches: [] });
     }
     return true;
   });
